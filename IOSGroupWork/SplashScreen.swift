@@ -51,7 +51,7 @@ struct ContentView: View {
                 SplashScreen()
                     .transition(CustomSplashTransition(isRoot: false))
             }else{
-                RootView()
+                LogInView()
                     .transition(CustomSplashTransition(isRoot: true))
             }
         }
@@ -75,6 +75,7 @@ struct ContentView: View {
     }
 }
 
+//THIS VIEW WILL LOAD LOGIN AND SIGN IN
 struct RootView:View {
     var body: some View {
         VStack {
