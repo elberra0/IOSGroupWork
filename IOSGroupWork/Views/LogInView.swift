@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct LogInView: View {
+    @Binding  var showSignUp: Bool
+    
     @State private var email: String = ""
     @State private var password: String = ""
     
@@ -36,6 +38,17 @@ struct LogInView: View {
                     .padding(.top,20)
                 Button("Log in"){}
                     .buttonStyle(.borderedProminent)
+                    .disabled(email.isEmpty || password.isEmpty)
+
+                
+                VStack{
+                    Text("Don't have an account?")
+                        .foregroundStyle(.gray)
+                    Button("Sign up"){
+                        showSignUp.toggle()
+                    }
+                        .foregroundStyle(.blue)
+                }.padding(.top,50)
                 
             }
             .padding(.top, 20)
@@ -110,5 +123,5 @@ struct TextViewCustom: View {
 }
 
 #Preview {
-    LogInView()
+    LogInView(showSignUp:.constant(false))
 }

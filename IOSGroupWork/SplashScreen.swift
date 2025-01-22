@@ -26,10 +26,10 @@ struct SplashScreen:View {
 }
 
 struct CustomSplashTransition: Transition {
-    var isRoot: Bool
+    var isLoginView: Bool
     func body(content: Content, phase:TransitionPhase) -> some View {
         content
-            .offset(y:phase.isIdentity ? 0 : isRoot ? screenSize.height : -screenSize.height)
+            .offset(y:phase.isIdentity ? 0 : isLoginView ? screenSize.height : -screenSize.height)
     }
     
     ///Current Screen Size
@@ -44,27 +44,33 @@ struct CustomSplashTransition: Transition {
 
 struct ContentView: View {
     @State private var showSplashScreen: Bool = true
+    @State private var showSignUp:Bool = false
     
     var body: some View {
-        ZStack{
-            if showSplashScreen {
-                SplashScreen()
-                    .transition(CustomSplashTransition(isRoot: false))
-            }else{
-                LogInView()
-                    .transition(CustomSplashTransition(isRoot: true))
+        NavigationStack{
+            ZStack{
+                if showSplashScreen {
+                    SplashScreen()
+                        .transition(CustomSplashTransition(isLoginView: false))
+                }else{
+                    LogInView(showSignUp: $showSignUp)
+                        .transition(CustomSplashTransition(isLoginView: true))
+                        .navigationDestination(isPresented: $showSignUp){
+                            SignUpView(showSignUp: $showSignUp)
+                        }
+                    
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
+            .task {
+                guard showSplashScreen else {return}
+                try? await Task.sleep(for: .seconds(0.5))
+                withAnimation(.smooth(duration: 0.5)) {
+                    showSplashScreen = false
+                }
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .ignoresSafeArea()
-        .task {
-            guard showSplashScreen else {return}
-            try? await Task.sleep(for: .seconds(0.5))
-            withAnimation(.smooth(duration: 0.5)) {
-                showSplashScreen = false
-            }
-        }
-
     }
     
     var safeArea:UIEdgeInsets {
@@ -74,21 +80,6 @@ struct ContentView: View {
         return .zero
     }
 }
-
-//THIS VIEW WILL LOAD LOGIN AND SIGN IN
-struct RootView:View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world! Git Update")
-        }
-        .background(.white)
-        .padding()
-    }
-}
-
 
 #Preview {
     SplashScreen()
