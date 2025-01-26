@@ -12,7 +12,8 @@ struct LogInView: View {
     
     @State private var email: String = ""
     @State private var password: String = ""
-    @State private var logiNvalid: Bool = false
+    @State private var loginInvalid: Bool = false
+    @State private var loginValid: Bool = false
     @State var users = UserDefaults.standard.dictionary(forKey: "users") as? [String: String] ?? [:]
     
     var body: some View {
@@ -39,16 +40,19 @@ struct LogInView: View {
                 TextViewCustom(icon:"lock", hint:"Password",isPassword: true, value:$password)
                     .padding(.top,20)
                 Button("Log in"){
-                    logiNvalid = logInSystem(emailOrUser: email, password: password, users: users)
+                    loginInvalid = logInSystem(emailOrUser: email, password: password, users: users)
                     
-                    if(!logiNvalid){
-                        // GO INSIDE APP
+                    if(!loginInvalid){
+                        loginValid = true
                     }
                 }
                     .buttonStyle(.borderedProminent)
                     .disabled(email.isEmpty || password.isEmpty)
-                    .alert( isPresented: $logiNvalid){
+                    .alert( isPresented: $loginInvalid){
                         Alert(title: Text("No se iniciar sesión"), message: Text("Campos introducidos incorrectos"), dismissButton: .default(Text("OK")))
+                    }
+                    .navigationDestination(isPresented: $loginValid){
+                        MapGymsNearbyView()
                     }
 
                 

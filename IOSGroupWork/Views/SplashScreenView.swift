@@ -11,7 +11,7 @@ extension Color {
     static let customBlue = Color(red: 44 / 255, green: 62 / 255, blue: 80 / 255)
 }
 
-struct SplashScreen:View {
+struct SplashScreenView:View {
     var body: some View {
         ZStack{
             Rectangle()
@@ -50,7 +50,7 @@ struct ContentView: View {
         NavigationStack{
             ZStack{
                 if showSplashScreen {
-                    SplashScreen()
+                    SplashScreenView()
                         .transition(CustomSplashTransition(isLoginView: false))
                 }else{
                     LogInView(showSignUp: $showSignUp)
@@ -82,5 +82,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    SplashScreen()
+    SplashScreenView()
 }
