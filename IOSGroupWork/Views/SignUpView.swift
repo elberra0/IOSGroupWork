@@ -138,7 +138,6 @@ struct UserAuth{
     
 }
 
-
 #Preview {
     SignUpView(showSignUp:.constant(true))
 }

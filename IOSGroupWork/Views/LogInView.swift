@@ -12,6 +12,9 @@ struct LogInView: View {
     
     @State private var email: String = ""
     @State private var password: String = ""
+    @State private var loginInvalid: Bool = false
+    @State private var loginValid: Bool = false
+    @State var users = UserDefaults.standard.dictionary(forKey: "users") as? [String: String] ?? [:]
     
     var body: some View {
         VStack(alignment: .leading,spacing: 20,content: {
@@ -36,9 +39,21 @@ struct LogInView: View {
                 TextViewCustom(icon:"at", hint:"Email",isPassword: false, value:$email)
                 TextViewCustom(icon:"lock", hint:"Password",isPassword: true, value:$password)
                     .padding(.top,20)
-                Button("Log in"){}
+                Button("Log in"){
+                    loginInvalid = logInSystem(emailOrUser: email, password: password, users: users)
+                    
+                    if(!loginInvalid){
+                        loginValid = true
+                    }
+                }
                     .buttonStyle(.borderedProminent)
                     .disabled(email.isEmpty || password.isEmpty)
+                    .alert( isPresented: $loginInvalid){
+                        Alert(title: Text("No se iniciar sesión"), message: Text("Campos introducidos incorrectos"), dismissButton: .default(Text("OK")))
+                    }
+                    .navigationDestination(isPresented: $loginValid){
+                        MapGymsNearbyView()
+                    }
 
                 
                 VStack{
@@ -59,6 +74,22 @@ struct LogInView: View {
             Spacer(minLength: 0)
         })
         .background(Color.customBlue)
+        .onAppear{
+            users = UserDefaults.standard.dictionary(forKey: "users") as? [String: String] ?? [:]
+        }
+    }
+}
+
+func logInSystem(emailOrUser:String,password:String,users:[String:String])->Bool{
+    if(users.keys.contains(emailOrUser)){
+        if (users[emailOrUser] == password){
+            return false
+
+        }else{
+            return true
+        }
+    }else{
+        return true
     }
 }
 

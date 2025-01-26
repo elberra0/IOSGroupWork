@@ -14,5 +14,5 @@ struct LogInSignIn: View {
 }
 
 #Preview {
-    SplashScreen()
+    SplashScreenView()
 }
