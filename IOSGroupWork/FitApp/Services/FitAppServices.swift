@@ -14,6 +14,8 @@ final class APIPersistenceService {
     private init() {}
     
     private let apiKey = ""
+    private let pathGetPlanes = "getplanes"
+    private let pathGetPlanById = "getplanbyId"
     
     //private(set) var workoutPlan: WorkoutPlan? =
     
@@ -32,8 +34,24 @@ final class APIPersistenceService {
         }
     }
     
+    func getPlanById(plandId: Int) async throws -> WorkoutPlan {
+        
+        var urlComponents = URLComponents(string: urlServer + pathGetPlanById)!
+        // Agregar parámetros de consulta
+        urlComponents.queryItems = [
+            URLQueryItem(name: "id", value: String(plandId))
+        ]
+        
+        let (data,_) = try await URLSession.shared.data(from: urlComponents.url!)
+        
+        let decoded = try JSONDecoder().decode(WorkoutPlan.self, from: data)
+        
+        return decoded
+    }
+    
     func getAll() async throws -> [WorkoutPlan] {
-        guard let url = URL(string: urlServer + "getplanes") else { throw URLError(.badURL) }
+    
+        guard let url = URL(string: urlServer + pathGetPlanes) else { throw URLError(.badURL) }
       
         let (data,_) = try await URLSession.shared.data(from: url)
         
