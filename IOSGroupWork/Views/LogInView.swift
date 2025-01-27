@@ -70,7 +70,6 @@ struct LogInView: View {
             .padding(.vertical, 20)
             .padding(.horizontal, 30)
             .toolbar(.hidden, for: .navigationBar)
-            
             Spacer(minLength: 0)
         })
         .background(Color.customBlue)
@@ -94,10 +93,13 @@ func logInSystem(emailOrUser:String,password:String,users:[String:String])->Bool
 }
 
 struct TextViewCustom: View {
+    @Environment(\.colorScheme) var colorScheme
+
     @State var icon: String = ""
     @State var iconColor: Color = .gray
     @State var hint: String = ""
     @State var isPassword: Bool = false
+    @State var darkModeEnabled : Bool = false
     
     @Binding var value : String
     
@@ -115,20 +117,18 @@ struct TextViewCustom: View {
                         if(showPassword){
                             TextField(hint, text: $value)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .background(.gray)
-                                .foregroundStyle(.black)
+                                .foregroundStyle(colorScheme == .dark ? .white : .black)
 
                         }else{
                             SecureField(hint, text: $value)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .background(.gray)
-                                .foregroundStyle(.black)
+                                .foregroundStyle(colorScheme == .dark ? .white : .black)
                         }
                     }
                 }else {
                     TextField(hint, text: $value)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .foregroundStyle(.black)
+                        .foregroundStyle(colorScheme == .dark ? .white : .black)
                 }
                 Divider()
             })

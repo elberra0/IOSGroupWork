@@ -60,7 +60,7 @@ struct MapGymsNearbyView: View {
     
     private func gerNearbyGyms() {
         let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = "gym"
+        request.naturalLanguageQuery = "GYM"
         request.region = MKCoordinateRegion(center: locationManager.location?.coordinate ?? CLLocationCoordinate2D(), latitudinalMeters: 1000, longitudinalMeters: 1000)
         
         let search = MKLocalSearch(request: request)
