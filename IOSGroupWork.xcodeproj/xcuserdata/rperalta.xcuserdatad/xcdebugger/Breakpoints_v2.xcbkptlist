@@ -34,36 +34,6 @@
             endingLineNumber = "42"
             landmarkName = "getAll()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "82AEF328-0135-40E0-88AC-BE78E9D6CB91 - ea0586d5bf36b4fa"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for IOSGroupWork.APIPersistenceService.getAll() async throws -&gt; Swift.Array&lt;IOSGroupWork.WorkoutPlan&gt;"
-                  moduleName = "IOSGroupWork.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rperalta/IOSGroupWork/IOSGroupWork/FitApp/Services/FitAppServices.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37">
-               </Location>
-               <Location
-                  uuid = "82AEF328-0135-40E0-88AC-BE78E9D6CB91 - ea0586d5bf36ab1d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for IOSGroupWork.APIPersistenceService.getAll() async throws -&gt; Swift.Array&lt;IOSGroupWork.WorkoutPlan&gt;"
-                  moduleName = "IOSGroupWork.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rperalta/IOSGroupWork/IOSGroupWork/FitApp/Services/FitAppServices.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "42"
-                  endingLineNumber = "42">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
