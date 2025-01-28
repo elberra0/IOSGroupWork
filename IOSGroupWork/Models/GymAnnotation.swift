@@ -14,7 +14,7 @@ final class GymAnnotation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
     
     init(gym: GymModel) {
-        title = gym.title
+        title = gym.gymName
         coordinate = gym.coordinate
     }
 }
