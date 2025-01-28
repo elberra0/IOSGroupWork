@@ -90,7 +90,6 @@ struct MapGymsNearbyView: View {
             
         }
         .ignoresSafeArea()
-
     }
 }
 

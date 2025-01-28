@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct LogInView: View {
+    @EnvironmentObject var userManager: UserManager
+
     @Binding  var showSignUp: Bool
     
     @State private var email: String = ""
@@ -36,13 +38,15 @@ struct LogInView: View {
 
             VStack(spacing:20){
                 //Text fields
-                TextViewCustom(icon:"at", hint:"Email",isPassword: false, value:$email)
+                TextViewCustom(icon:"at", hint:"Email or UserName",isPassword: false, value:$email)
                 TextViewCustom(icon:"lock", hint:"Password",isPassword: true, value:$password)
                     .padding(.top,20)
                 Button("Log in"){
-                    loginInvalid = logInSystem(emailOrUser: email, password: password, users: users)
-                    
+                    loginInvalid = UserManager.checkUserLogin(userNameOrEmail: email, password: password)
+
                     if(!loginInvalid){
+                        //Store current user logged in
+                        userManager.loggedInUser = email
                         loginValid = true
                     }
                 }
@@ -52,7 +56,8 @@ struct LogInView: View {
                         Alert(title: Text("No se iniciar sesión"), message: Text("Campos introducidos incorrectos"), dismissButton: .default(Text("OK")))
                     }
                     .navigationDestination(isPresented: $loginValid){
-                        MapGymsNearbyView()
+                        //MapGymsNearbyView()
+                        SettingsView()
                     }
 
                 
