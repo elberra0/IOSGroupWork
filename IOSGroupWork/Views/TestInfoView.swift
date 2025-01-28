@@ -14,6 +14,7 @@ struct TestInfoView: View {
     @State private var height: String = ""
     @State private var objetivo: String = ""
     @State private var showAlert: Bool = false
+    @State private var stringBuilder: String = ""
     
     let sexOptions = ["Masculino", "Femenino"]
     let objetivoOptions = ["Perder peso", "Ganar masa muscular", "Mantener peso"]
@@ -79,13 +80,12 @@ struct TestInfoView: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 .padding(16)
-                .alert(isPresented: $showAlert) {
-                    Alert(
-                        title: Text("¡Atención!"),
-                        message: Text("Este es un mensaje de alerta."),
-                        dismissButton: .default(Text("Aceptar")) {
-                        }
-                    )
+                .alert("¡Aviso!", isPresented: $showAlert) {
+                    Button("Ok", role: .cancel) {
+                        stringBuilder = ""
+                    }
+                } message: {
+                    Text(stringBuilder)
                 }
             }
         })
@@ -95,7 +95,33 @@ struct TestInfoView: View {
     }
     
     func onSubmitClick() {
-        showAlert = !showAlert
+        
+        if age  == ""
+        {
+            stringBuilder.append("Debe espeficiar su edad. \n")
+        }
+        
+        if sex  == ""
+        {
+            stringBuilder.append("Debe espeficiar su sexo. \n")
+        }
+        
+        if weight  == ""
+        {
+            stringBuilder.append("Debe espeficiar su peso. \n")
+        }
+        
+        if height  == ""
+        {
+            stringBuilder.append("Debe espeficiar su altura. \n")
+        }
+        
+        if objetivo  == ""
+        {
+            stringBuilder.append("Debe elegir un objetivo. \n")
+        }
+        
+        showAlert = stringBuilder != ""
     }
 }
 
