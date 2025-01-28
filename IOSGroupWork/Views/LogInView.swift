@@ -46,7 +46,7 @@ struct LogInView: View {
 
                     if(!loginInvalid){
                         //Store current user logged in
-                        userManager.loggedInUser = email
+                        userManager.loggedInUser = UserManager.getUsername(usernameOrEmail: email)
                         loginValid = true
                     }
                 }

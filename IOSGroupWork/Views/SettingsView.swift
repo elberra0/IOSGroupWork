@@ -11,12 +11,11 @@ struct SettingsView: View {
     @EnvironmentObject var userManager: UserManager
     @Environment(\.presentationMode) var presentationMode
     
-    @State private var newSettingsValidation = SettingsValidation()
-
-    @State private var email: String = ""
-    @State private var userName: String = ""
-    @State private var password: String = ""
-    @State private var passwordValidate: String = ""
+    @State private var logmessage: String = ""
+    @State private var newEmail: String = ""
+    @State private var newUserName: String = ""
+    @State private var newPassword: String = ""
+    @State private var newPasswordValidate: String = ""
     @State private var showAlert: Bool = false
         
     @State var users = UserDefaults.standard.dictionary(forKey: "users") as? [String: String] ?? [:]
@@ -50,38 +49,26 @@ struct SettingsView: View {
 
             VStack(spacing:20){
                 //Text fields
-                TextViewCustom(icon:"at", hint:"New Email", value: $email)
+                TextViewCustom(icon:"at", hint:"New Email", value: $newEmail)
                 
-                TextViewCustom(icon:"person", hint:"New User Name", value: $userName)
+                TextViewCustom(icon:"person", hint:"New User Name", value: $newUserName)
                 
-                TextViewCustom(icon:"lock", hint:"New Password",isPassword: true, value: $password)
+                TextViewCustom(icon:"lock", hint:"New Password",isPassword: true, value: $newPassword)
                 
-                TextViewCustom(icon:"lock", hint:"Confirm New Password",isPassword: true, value:$passwordValidate)
+                TextViewCustom(icon:"lock", hint:"Confirm New Password",isPassword: true, value:$newPasswordValidate)
                 
                 Button("Update credentials"){
                     //USER NEW CREDENTIALS
-                    showAlert = false
-                    users = UserDefaults.standard.dictionary(forKey: "users") as? [String: String] ?? [:]
-                    emailsUsers = UserDefaults.standard.dictionary(forKey: "emails") as? [String: String] ?? [:]
+                    let userValidation = userAuth()
                     
-                    
-                    newSettingsValidation.currentUserLogged = userManager.loggedInUser ?? "(username)usuario no logueado"
-                    newSettingsValidation.currenteEmailLogged = userManager.loggedInUser ?? "(email)usuario no logueado"
-                    newSettingsValidation.newUsername = userName
-                    newSettingsValidation.newEmail = email
-                    newSettingsValidation.newPassword = password
-                    newSettingsValidation.newPasswordConfirmation = passwordValidate
-
-                    newSettingsValidation.users = users
-                    //newSettingsValidation.emailsUsers = emailsUsers
-                    
-                    newSettingsValidation.validateNewUserInformation()
-                    showAlert = true
+                    if(userValidation){
+                        showAlert = true
+                    }
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(email.isEmpty && userName.isEmpty && (passwordValidate.isEmpty || password.isEmpty))
+                .disabled(newEmail.isEmpty && newUserName.isEmpty && (newPasswordValidate.isEmpty || newPassword.isEmpty))
                 .alert(isPresented: $showAlert){
-                    Alert(title: Text("Settings log:"), message: Text(newSettingsValidation.logMessage), dismissButton: .default(Text("OK")))
+                    Alert(title: Text("Settings log:"), message: Text(logmessage), dismissButton: .default(Text("OK")))
                 }.padding(.top, 30)
             }
             .padding(.top, 30)
@@ -93,61 +80,51 @@ struct SettingsView: View {
         })
         .background(Color.customBlue)
     }
-}
-
-struct SettingsValidation{
-    var users:[String: String] = [:]
-    var currentUserLogged: String = ""
-    var currenteEmailLogged: String = ""
-    var newUsername: String = ""
-    var newEmail: String = ""
-    var newPassword: String = ""
-    var newPasswordConfirmation: String = ""
-    var showAlert: Bool = false
-    var logMessage: String = ""
     
-    mutating func validateNewUserInformation(){
-        if(!newUsername.isEmpty){
-            if(users.keys.contains(newUsername)){
-                logMessage = "This username is already taken. Please choose another one"
+    func userAuth() -> Bool{
+        if(!newUserName.isEmpty){
+            if(!UserManager.userExists(userName: newUserName)){
+                var user = UserManager.getUser(userNameOrEmail: userManager.loggedInUser)
+                user?.username = newUserName
+                
+                UserManager.modifyUser(username: userManager.loggedInUser ?? "user not found", newUserName: newUserName, newEmail: user?.email ?? "email not found", newPassword: user?.password ?? "password not found")
+                
+                var userss = UserManager.loadUsers()
+                userManager.loggedInUser = newUserName
+            
+                logmessage = "Username changed correctly"
             }else{
-                let password = users[currentUserLogged]
-                users[newUsername] = password
-                users.removeValue(forKey: currentUserLogged)
-                UserDefaults.standard.set(users, forKey: "users")
-                currentUserLogged = newUsername
-                logMessage = "User changed successfully"
-            }
-        }
-
-        if(!newEmail.isEmpty){
-            if(users.keys.contains(newEmail)){
-                logMessage = "This email is already taken. Please choose another one"
-            }else{
-                let password = users[currenteEmailLogged]
-                users[newEmail] = password
-                users.removeValue(forKey: currentUserLogged)
-                UserDefaults.standard.set(users, forKey: "users")
-                currenteEmailLogged = newEmail
-                logMessage = "Email changed succesfully"
+                logmessage = "Username is already taken. Please choose another one"
+                return true
             }
         }
         
-        if(!newPassword.isEmpty && !newPasswordConfirmation.isEmpty){
-            if(newPassword == users[currentUserLogged]){
-                logMessage = "Your password cant be the same as your old password"
+        if(!newEmail.isEmpty){
+            if(!UserManager.userExists(email:newEmail)){
+                let password = UserManager.getUserPassword(usernameOrEmail: UserManager.getUserEmail(username:userManager.loggedInUser ?? "email not found") ?? "password not found")
+                var user = UserManager.getUser(userNameOrEmail: userManager.loggedInUser)
+                user?.email = newEmail
+                
+                UserManager.modifyUser(username: userManager.loggedInUser ?? "user not found", newUserName: user?.username ?? "username not found", newEmail: newEmail, newPassword: password)
+                
+                var userss = UserManager.loadUsers()
+                logmessage = "Email changed correctly"
             }else{
-                if (newPassword == newPasswordConfirmation){
-                    users[currentUserLogged] = newPassword
-                    users[currenteEmailLogged] = newPassword
-                    UserDefaults.standard.set(users, forKey: "users")
-                    
-                    logMessage = "Password changed succesfully"
-                }else{
-                    logMessage = "Your passwords dont match"
-                }
+                logmessage = "Email is already taken. Please choose another one"
+                return true
             }
         }
+        
+        if(!newPassword.isEmpty && !newPasswordValidate.isEmpty){
+            if (newPassword != newPasswordValidate){
+                logmessage = "Passwords do not match, try again"
+                return true
+            }else{
+                UserManager.updateUserPassword(username: userManager.loggedInUser ?? "user not found", newPassword: newPassword)
+                logmessage = "Password changed correctly"
+            }
+        }
+        return true
     }
 }
 
