@@ -7,12 +7,13 @@
 import SwiftUI
 
 struct TestInfoView: View {
-
+    
     @State private var age: String = ""
     @State private var sex: String = ""
     @State private var weight: String = ""
     @State private var height: String = ""
     @State private var objetivo: String = ""
+    @State private var showAlert: Bool = false
     
     let sexOptions = ["Masculino", "Femenino"]
     let objetivoOptions = ["Perder peso", "Ganar masa muscular", "Mantener peso"]
@@ -33,7 +34,7 @@ struct TestInfoView: View {
                     .padding(.top, -10)
             }
             .padding(.horizontal, 25)
-        
+            
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     TextField("Edad", text: $age)
@@ -78,6 +79,14 @@ struct TestInfoView: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 .padding(16)
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("¡Atención!"),
+                        message: Text("Este es un mensaje de alerta."),
+                        dismissButton: .default(Text("Aceptar")) {
+                        }
+                    )
+                }
             }
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -86,6 +95,7 @@ struct TestInfoView: View {
     }
     
     func onSubmitClick() {
+        showAlert = !showAlert
     }
 }
 
