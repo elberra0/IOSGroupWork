@@ -12,7 +12,7 @@ struct AppLoggedIn: View {
         TabView {
             Tab("Fit Test", systemImage: "heart.fill") {
                 NavigationStack {
-                    //AQUI EL FORM
+                    HomeView()
                 }
             }
             

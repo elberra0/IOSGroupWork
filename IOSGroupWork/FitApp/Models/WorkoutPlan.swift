@@ -12,12 +12,4 @@ struct WorkoutPlan: Codable {
     let ejercicios: [String: DayPlan]
     let consejos: [String]
     var nutricion: Nutrition
-    static let sampleData: WorkoutPlan = {
-        var workplan : WorkoutPlan?
-        Task {
-            workplan = try! await APIPersistenceService.shared.getPlanById(plandId: 1)
-        }
-        
-        return workplan!
-    }()
 }

@@ -7,19 +7,25 @@
 import SwiftUI
 
 struct TestInfoView: View {
-    
+    @Environment(\.dismiss) private var dismiss
     @State private var age: String = ""
     @State private var sex: String = ""
     @State private var weight: String = ""
     @State private var height: String = ""
     @State private var objetivo: String = ""
     @State private var showAlert: Bool = false
+    @State private var showAlertPlan: Bool = false
     @State private var stringBuilder: String = ""
-    
+    let _APIPersistenceService: APIPersistenceService
     let sexOptions = ["Masculino", "Femenino"]
     let objetivoOptions = ["Perder peso", "Ganar masa muscular", "Mantener peso"]
-    
+    init() {
+     _APIPersistenceService = APIPersistenceService.shared
+     _APIPersistenceService.load()
+    }
     var body: some View {
+       
+        
         VStack(alignment: .leading,spacing: 20,content: {
             Spacer(minLength: 100)
             Group{
@@ -79,10 +85,20 @@ struct TestInfoView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
+                .alert("¡Aviso!", isPresented: $showAlertPlan) {
+                    Button("Ok", role: .none) {
+                        stringBuilder = ""
+                        showAlert = false
+                        dismiss()
+                    }
+                } message: {
+                    Text(stringBuilder)
+                }
                 .padding(16)
                 .alert("¡Aviso!", isPresented: $showAlert) {
-                    Button("Ok", role: .cancel) {
+                    Button("Ok", role: .none) {
                         stringBuilder = ""
+                        showAlert = false
                     }
                 } message: {
                     Text(stringBuilder)
@@ -121,8 +137,79 @@ struct TestInfoView: View {
             stringBuilder.append("Debe elegir un objetivo. \n")
         }
         
-        showAlert = stringBuilder != ""
+        if stringBuilder == ""
+        {
+            let puntos =  evaluarPuntos()
+            
+            var planId = 0
+           
+            switch puntos {
+            case 0...7:
+                planId = 3
+            case 8...11:
+                planId = 2
+            case 12...99:
+                planId = 1
+            default:
+                planId = 0
+            }
+            PlanManager.saveMyPlanId(planId: planId)
+            stringBuilder = try! _APIPersistenceService.getPlanById(plandId: planId).clasificacion
+            showAlertPlan = true
+        }
+        else
+        {
+            showAlert = true
+        }
     }
+    
+    private func evaluarPuntos() -> Int {
+        var puntosPuntos = 0
+
+        switch Int(age)! {
+        case 18...30:
+            puntosPuntos += 3
+        case 31...50:
+            puntosPuntos += 2
+        default:
+            puntosPuntos += 1
+        }
+
+        switch sex {
+        case "Hombre":
+            puntosPuntos += 2
+        default:
+            puntosPuntos += 1
+        }
+
+        switch Double(weight)! {
+        case 0.0...59.0:
+            puntosPuntos += 2
+        case 60.0...80.0:
+            puntosPuntos += 1
+        default:
+            puntosPuntos += 3
+        }
+
+        switch  Double(height)! {
+        case 0.0...159.99:
+            puntosPuntos += 1
+        case 160...180.00:
+            puntosPuntos += 2
+        default:
+            puntosPuntos += 3
+        }
+
+        switch objetivo {
+        case "Mantener peso":
+            puntosPuntos += 2
+        default:
+            puntosPuntos += 3
+        }
+
+        return puntosPuntos
+    }
+
 }
 
 struct ContentView_Previews: PreviewProvider {

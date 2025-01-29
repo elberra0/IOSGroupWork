@@ -17,36 +17,18 @@ final class APIPersistenceService {
     private let pathGetPlanes = "getplanes"
     private let pathGetPlanById = "getplanbyId"
     
-    //private(set) var workoutPlan: WorkoutPlan? =
-    
+    private(set) var workoutPlan: [WorkoutPlan] = []
     private let urlServer = "https://invoicegen.gear.host/api/FitApp/"
     
     func load() {
         Task{
-            
-            var workoutPlan = try await getAll()
-            /*
-             Task {
-                 var result =  try await APIPersistenceService.shared.getAll()
-             }
-             */
-            
+            workoutPlan = try await getAll()
+            PlanManager.savePlanes(planes: workoutPlan)
         }
     }
     
-    func getPlanById(plandId: Int) async throws -> WorkoutPlan {
-        
-        var urlComponents = URLComponents(string: urlServer + pathGetPlanById)!
-        // Agregar parámetros de consulta
-        urlComponents.queryItems = [
-            URLQueryItem(name: "id", value: String(plandId))
-        ]
-        
-        let (data,_) = try await URLSession.shared.data(from: urlComponents.url!)
-        
-        let decoded = try JSONDecoder().decode(WorkoutPlan.self, from: data)
-        
-        return decoded
+    func getPlanById(plandId: Int) throws -> WorkoutPlan {
+        return  PlanManager.getPlanById(planId: plandId)
     }
     
     func getAll() async throws -> [WorkoutPlan] {
@@ -56,7 +38,7 @@ final class APIPersistenceService {
         let (data,_) = try await URLSession.shared.data(from: url)
         
         let decoded = try JSONDecoder().decode([WorkoutPlan].self, from: data)
-        
+ 
         return decoded
     }
 }
