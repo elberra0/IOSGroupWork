@@ -65,7 +65,7 @@ struct SettingsView: View {
                         showAlert = true
                     }
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.bordered)
                 .disabled(newEmail.isEmpty && newUserName.isEmpty && (newPasswordValidate.isEmpty || newPassword.isEmpty))
                 .alert(isPresented: $showAlert){
                     Alert(title: Text("Settings log:"), message: Text(logmessage), dismissButton: .default(Text("OK")))

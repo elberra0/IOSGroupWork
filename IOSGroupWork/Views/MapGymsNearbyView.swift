@@ -86,6 +86,7 @@ struct MapGymsNearbyView: View {
                 gerNearbyGyms()
             }.disabled(nearbyGyms.count > 1)
                 .buttonStyle(.borderedProminent)
+                .foregroundStyle(.blue)
                 .padding(.bottom, 100)
             
             VStack {
