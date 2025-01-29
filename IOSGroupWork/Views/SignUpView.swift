@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SignUpView: View {
     @Environment(\.presentationMode) var presentationMode
-    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+
     @Binding  var showSignUp: Bool
         
     @State private var errorMessage: String = ""
@@ -37,7 +38,7 @@ struct SignUpView: View {
                     .foregroundStyle(.white)
                     .font(.title)
                     .fontWeight(.bold)
-                    .padding(.top,50)
+                    .padding(.top,horizontalSizeClass == .compact ? 100 : 5)
                 
                 Text("Sign up to access the FitAPP")
                     .font(.caption)
@@ -46,50 +47,50 @@ struct SignUpView: View {
                     .padding(.top, -10)
             }
             .padding(.horizontal, 25)
-            
-            VStack(spacing:20){
-                //Text fields
-                TextViewCustom(icon:"at", hint:"Email", value: $email)
-                
-                TextViewCustom(icon:"person", hint:"User Name", value: $userName)
-                
-                TextViewCustom(icon:"lock", hint:"Password",isPassword: true, value: $password)
-                
-                TextViewCustom(icon:"lock", hint:"Confirm Password",isPassword: true, value:$passwordValidate)
-                
-                Button("Sign up"){
-                    let userValidation = userAuth()
+            ScrollView{
+                VStack(spacing:20){
+                    //Text fields
+                    TextViewCustom(icon:"at", hint:"Email", value: $email)
                     
-                    if(userValidation){
-                        showAlert = true
-                    }else{
-                        let user = User(username: userName, password: password, email: email)
-                        UserManager.addUser(user: user)
-                                            
-                        showSignUp.toggle()
+                    TextViewCustom(icon:"person", hint:"User Name", value: $userName)
+                    
+                    TextViewCustom(icon:"lock", hint:"Password",isPassword: true, value: $password)
+                    
+                    TextViewCustom(icon:"lock", hint:"Confirm Password",isPassword: true, value:$passwordValidate)
+                    
+                    Button("Sign up"){
+                        let userValidation = userAuth()
+                        
+                        if(userValidation){
+                            showAlert = true
+                        }else{
+                            let user = User(username: userName, password: password, email: email)
+                            UserManager.addUser(user: user)
+                            
+                            showSignUp.toggle()
+                        }
                     }
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(email.isEmpty || password.isEmpty||userName.isEmpty||passwordValidate.isEmpty)
-                .alert(isPresented: $showAlert){
-                    Alert(title: Text("No se pudo registrar User"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
-                }
-                
-                VStack{
-                    Text("Already have an account?")
-                        .foregroundStyle(.gray)
-                    Button("Log In"){
-                        showSignUp.toggle()
+                    .buttonStyle(.borderedProminent)
+                    .disabled(email.isEmpty || password.isEmpty||userName.isEmpty||passwordValidate.isEmpty)
+                    .alert(isPresented: $showAlert){
+                        Alert(title: Text("No se pudo registrar User"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
                     }
-                    .foregroundStyle(.blue)
-                }.padding(.top,50)
-                
+                    
+                    VStack{
+                        Text("Already have an account?")
+                            .foregroundStyle(.gray)
+                        Button("Log In"){
+                            showSignUp.toggle()
+                        }
+                        .foregroundStyle(.blue)
+                    }.padding(.top,50)
+                    
+                }
+                .padding(.top, 20)
+                .padding(.vertical, 20)
+                .padding(.horizontal, horizontalSizeClass == .compact ? 30 : 100)
+                .toolbar(.hidden, for: .navigationBar)
             }
-            .padding(.top, 20)
-            .padding(.vertical, 20)
-            .padding(.horizontal, 30)
-            .toolbar(.hidden, for: .navigationBar)
-            
             Spacer(minLength: 0)
         })
         .background(Color.customBlue)

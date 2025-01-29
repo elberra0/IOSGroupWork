@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LogInView: View {
     @EnvironmentObject var userManager: UserManager
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
     @Binding  var showSignUp: Bool
     
@@ -27,6 +28,7 @@ struct LogInView: View {
                     .foregroundStyle(.white)
                     .font(.title)
                     .fontWeight(.bold)
+                    .padding(.top,horizontalSizeClass == .compact ? 100 : 5)
                 
                 Text("Log in to access the FitAPP")
                     .font(.caption)
@@ -35,21 +37,22 @@ struct LogInView: View {
                     .padding(.top, -10)
             }
             .padding(.horizontal, 25)
-
-            VStack(spacing:20){
-                //Text fields
-                TextViewCustom(icon:"at", hint:"Email or UserName",isPassword: false, value:$email)
-                TextViewCustom(icon:"lock", hint:"Password",isPassword: true, value:$password)
-                    .padding(.top,20)
-                Button("Log in"){
-                    loginInvalid = UserManager.checkUserLogin(userNameOrEmail: email, password: password)
-
-                    if(!loginInvalid){
-                        //Store current user logged in
-                        userManager.loggedInUser = UserManager.getUsername(usernameOrEmail: email)
-                        loginValid = true
+            
+            ScrollView{
+                VStack(spacing:20){
+                    //Text fields
+                    TextViewCustom(icon:"at", hint:"Email or UserName",isPassword: false, value:$email)
+                    TextViewCustom(icon:"lock", hint:"Password",isPassword: true, value:$password)
+                        .padding(.top,20)
+                    Button("Log in"){
+                        loginInvalid = UserManager.checkUserLogin(userNameOrEmail: email, password: password)
+                        
+                        if(!loginInvalid){
+                            //Store current user logged in
+                            userManager.loggedInUser = UserManager.getUsername(usernameOrEmail: email)
+                            loginValid = true
+                        }
                     }
-                }
                     .buttonStyle(.borderedProminent)
                     .disabled(email.isEmpty || password.isEmpty)
                     .alert( isPresented: $loginInvalid){
@@ -59,23 +62,25 @@ struct LogInView: View {
                         //MapGymsNearbyView()
                         AppLoggedIn()
                     }
-
-                
-                VStack{
-                    Text("Don't have an account?")
-                        .foregroundStyle(.gray)
-                    Button("Sign up"){
-                        showSignUp.toggle()
-                    }
+                    
+                    
+                    VStack{
+                        Text("Don't have an account?")
+                            .foregroundStyle(.gray)
+                        Button("Sign up"){
+                            showSignUp.toggle()
+                        }
                         .foregroundStyle(.blue)
-                }.padding(.top,50)
+                    }.padding(.top,50)
+                    
+                }
+                .padding(.top, 20)
+                .padding(.vertical, 20)
+                .padding(.horizontal, horizontalSizeClass == .compact ? 30 : 100)
+                .toolbar(.hidden, for: .navigationBar)
                 
+                Spacer(minLength: 0)
             }
-            .padding(.top, 20)
-            .padding(.vertical, 20)
-            .padding(.horizontal, 30)
-            .toolbar(.hidden, for: .navigationBar)
-            Spacer(minLength: 0)
         })
         .background(Color.customBlue)
         .onAppear{
