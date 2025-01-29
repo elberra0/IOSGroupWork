@@ -28,7 +28,7 @@ final class APIPersistenceService {
     }
     
     func getPlanById(plandId: Int) throws -> WorkoutPlan {
-        return  PlanManager.getPlanById(planId: plandId)
+        return try PlanManager.getPlanById(planId: plandId)
     }
     
     func getAll() async throws -> [WorkoutPlan] {

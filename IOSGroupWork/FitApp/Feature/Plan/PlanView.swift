@@ -13,7 +13,7 @@
 import SwiftUI
 
 struct PlanView: View {
-    let myPlan =  PlanManager.getmyPlan()
+    let myPlan = PlanManager.getmyPlan()
     var body: some View {
         
         VStack(alignment: .leading,spacing: 20,content: {

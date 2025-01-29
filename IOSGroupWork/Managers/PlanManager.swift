@@ -20,8 +20,13 @@ class PlanManager:ObservableObject {
         UserDefaults.standard.set(planId, forKey: "planId")
     }
     
-    static func getPlanById(planId: Int) -> WorkoutPlan {
+    static func getPlanById(planId: Int) ->  WorkoutPlan {
         let planes = UserDefaults.standard.data(forKey: "planes")
+        if planes == nil
+        {
+            return WorkoutPlan(id: 0, clasificacionid: 0, clasificacion: "", ejercicios: [:], consejos: [], nutricion: Nutrition(principios: Principles(macronutrientes: [:]), planComidas: [:]))
+        }
+            
         let localPlanes = try! JSONDecoder().decode([WorkoutPlan].self, from: planes!)
         
         return localPlanes.first(where: {$0.id == planId})!
@@ -29,6 +34,6 @@ class PlanManager:ObservableObject {
     
     static func getmyPlan() -> WorkoutPlan {
         let planId: Int = UserDefaults.standard.integer(forKey: "planId")
-        return getPlanById(planId: planId)
+        return  getPlanById(planId: planId)
     }
 }
