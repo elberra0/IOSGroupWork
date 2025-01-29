@@ -77,8 +77,18 @@ struct SettingsView: View {
             .toolbar(.hidden, for: .navigationBar)
             
             Spacer(minLength: 0)
+            
+            VStack {
+                Spacer()
+                Rectangle()
+                    .fill(Color.navigationBarBlue)
+                    .frame(maxWidth: .infinity, maxHeight: 100)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
         })
         .background(Color.customBlue)
+
     }
     
     func userAuth() -> Bool{

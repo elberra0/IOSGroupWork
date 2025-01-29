@@ -57,7 +57,7 @@ struct LogInView: View {
                     }
                     .navigationDestination(isPresented: $loginValid){
                         //MapGymsNearbyView()
-                        SettingsView()
+                        AppLoggedIn()
                     }
 
                 

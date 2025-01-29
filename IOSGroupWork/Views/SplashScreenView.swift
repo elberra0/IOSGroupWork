@@ -9,7 +9,7 @@ import SwiftUI
 
 extension Color {
     static let customBlue = Color(red: 44 / 255, green: 62 / 255, blue: 80 / 255)
-}
+    static let navigationBarBlue = Color(red: 52 / 255, green: 73 / 255, blue: 94 / 255)}
 
 struct SplashScreenView:View {
     var body: some View {
