@@ -88,6 +88,14 @@ struct MapGymsNearbyView: View {
                 .buttonStyle(.borderedProminent)
                 .padding(.bottom, 100)
             
+            VStack {
+                Spacer()
+                Rectangle()
+                    .fill(Color.navigationBarBlue)
+                    .frame(maxWidth: .infinity, maxHeight: 100)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
         }
         .ignoresSafeArea()
     }

@@ -10,7 +10,8 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var userManager: UserManager
     @Environment(\.presentationMode) var presentationMode
-    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+
     @State private var logmessage: String = ""
     @State private var newEmail: String = ""
     @State private var newUserName: String = ""
@@ -22,43 +23,42 @@ struct SettingsView: View {
     @State var emailsUsers = UserDefaults.standard.dictionary(forKey: "emails") as? [String: String] ?? [:]
     
     var body: some View {
-        VStack(content: {
-            Button(action: {
-                presentationMode.wrappedValue.dismiss()
-            }) {
-                Label("Back", systemImage: "arrow.left")
-                    .foregroundColor(.white)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 10)
-            
-            Group{
-                Text("Settings")
-                    .foregroundStyle(.white)
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(.top,50)
+            VStack(content: {
+                Group{
+                    Text("Settings")
+                        .foregroundStyle(.white)
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding(.top,horizontalSizeClass == .compact ? 100 : 5)
+                    
+                    Text("Change your user information")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.gray)
+                        .padding(.top, -10)
+                }
+                .padding(.horizontal, 25)
                 
-                Text("Change your user information")
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.gray)
-                    .padding(.top, -10)
-            }
-            .padding(.horizontal, 25)
-
-            VStack(spacing:20){
-                //Text fields
-                TextViewCustom(icon:"at", hint:"New Email", value: $newEmail)
-                
-                TextViewCustom(icon:"person", hint:"New User Name", value: $newUserName)
-                
-                TextViewCustom(icon:"lock", hint:"New Password",isPassword: true, value: $newPassword)
-                
-                TextViewCustom(icon:"lock", hint:"Confirm New Password",isPassword: true, value:$newPasswordValidate)
+                ScrollView{
+                    VStack(spacing:20){
+                        //Text fields
+                        TextViewCustom(icon:"at", hint:"New Email", value: $newEmail)
+                        
+                        TextViewCustom(icon:"person", hint:"New User Name", value: $newUserName)
+                        
+                        TextViewCustom(icon:"lock", hint:"New Password",isPassword: true, value: $newPassword)
+                        
+                        TextViewCustom(icon:"lock", hint:"Confirm New Password",isPassword: true, value:$newPasswordValidate)
+                        
+                        
+                    }
+                    .padding(.top,60)
+                    .padding(.vertical, 20)
+                    .padding(.horizontal, horizontalSizeClass == .compact ? 30 : 100)
+                    .toolbar(.hidden, for: .navigationBar)
+                }
                 
                 Button("Update credentials"){
-                    //USER NEW CREDENTIALS
                     let userValidation = userAuth()
                     
                     if(userValidation){
@@ -70,15 +70,21 @@ struct SettingsView: View {
                 .alert(isPresented: $showAlert){
                     Alert(title: Text("Settings log:"), message: Text(logmessage), dismissButton: .default(Text("OK")))
                 }.padding(.top, 30)
-            }
-            .padding(.top, 30)
-            .padding(.vertical, 20)
-            .padding(.horizontal, 30)
-            .toolbar(.hidden, for: .navigationBar)
-            
-            Spacer(minLength: 0)
-        })
-        .background(Color.customBlue)
+                
+
+                
+                    Spacer()
+
+                    Rectangle()
+                        .fill(Color.navigationBarBlue)
+                        .frame(maxWidth: .infinity, maxHeight: 100)
+                        .ignoresSafeArea()
+                
+            })
+            .ignoresSafeArea()
+            .background(Color.customBlue)
+        
+
     }
     
     func userAuth() -> Bool{
