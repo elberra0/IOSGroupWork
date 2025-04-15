@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var userManager: UserManager
     @Environment(\.presentationMode) var presentationMode
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
 
     @State private var logmessage: String = ""
     @State private var newEmail: String = ""
@@ -29,7 +29,7 @@ struct SettingsView: View {
                         .foregroundStyle(.white)
                         .font(.title)
                         .fontWeight(.bold)
-                        .padding(.top,horizontalSizeClass == .compact ? 100 : 5)
+                        .padding(.top,verticalSizeClass == .compact ? 5 : 100)
                     
                     Text("Change your user information")
                         .font(.caption)
@@ -54,31 +54,33 @@ struct SettingsView: View {
                     }
                     .padding(.top,60)
                     .padding(.vertical, 20)
-                    .padding(.horizontal, horizontalSizeClass == .compact ? 30 : 100)
+                    .padding(.horizontal, verticalSizeClass == .compact ? 100 : 30)
                     .toolbar(.hidden, for: .navigationBar)
-                }
-                
-                Button("Update credentials"){
-                    let userValidation = userAuth()
                     
-                    if(userValidation){
-                        showAlert = true
-                    }
-                }
-                .buttonStyle(.bordered)
-                .disabled(newEmail.isEmpty && newUserName.isEmpty && (newPasswordValidate.isEmpty || newPassword.isEmpty))
-                .alert(isPresented: $showAlert){
-                    Alert(title: Text("Settings log:"), message: Text(logmessage), dismissButton: .default(Text("OK")))
-                }.padding(.top, 30)
-                
-
-                
+                    Button(action:{
+                        let userValidation = userAuth()
+                        if(userValidation){
+                            showAlert = true
+                        }}){
+                            Text("Update credentials")
+                                .padding()
+                                .background(Color.white)
+                                .foregroundColor(.customBlue)
+                                .cornerRadius(10)
+                        }
+                        .disabled(newEmail.isEmpty && newUserName.isEmpty && (newPasswordValidate.isEmpty || newPassword.isEmpty))
+                        .alert(isPresented: $showAlert){
+                            Alert(title: Text("Settings log:"), message: Text(logmessage), dismissButton: .default(Text("OK")))
+                        }.padding(.bottom, 70)
+                    
                     Spacer()
+                    
+                }
 
-                    Rectangle()
-                        .fill(Color.navigationBarBlue)
-                        .frame(maxWidth: .infinity, maxHeight: 100)
-                        .ignoresSafeArea()
+                Rectangle()
+                    .fill(Color.navigationBarBlue)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: verticalSizeClass == .compact ? 65 : 100)
                 
             })
             .ignoresSafeArea()

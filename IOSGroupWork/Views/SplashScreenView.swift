@@ -58,7 +58,6 @@ struct ContentView: View {
                         .navigationDestination(isPresented: $showSignUp){
                             SignUpView(showSignUp: $showSignUp)
                         }
-                    
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

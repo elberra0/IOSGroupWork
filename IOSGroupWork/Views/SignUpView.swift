@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SignUpView: View {
     @Environment(\.presentationMode) var presentationMode
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
 
     @Binding  var showSignUp: Bool
         
@@ -38,7 +38,7 @@ struct SignUpView: View {
                     .foregroundStyle(.white)
                     .font(.title)
                     .fontWeight(.bold)
-                    .padding(.top,horizontalSizeClass == .compact ? 100 : 5)
+                    .padding(.top,verticalSizeClass == .compact ? 5 : 100)
                 
                 Text("Sign up to access the FitAPP")
                     .font(.caption)
@@ -88,7 +88,7 @@ struct SignUpView: View {
                 }
                 .padding(.top, 20)
                 .padding(.vertical, 20)
-                .padding(.horizontal, horizontalSizeClass == .compact ? 30 : 100)
+                .padding(.horizontal, verticalSizeClass == .compact ? 100 : 30)
                 .toolbar(.hidden, for: .navigationBar)
             }
             Spacer(minLength: 0)

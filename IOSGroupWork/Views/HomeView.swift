@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    
     @State private var isShowingTestInfoView = false
     @State private var isShowingPlanView = false
     @State private var showAlert = false
@@ -21,8 +23,8 @@ struct HomeView: View {
             }) {
                 Text("Do test")
                     .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
+                    .background(Color.white)
+                    .foregroundColor(.customBlue)
                     .cornerRadius(10)
             }
             .sheet(isPresented: $isShowingTestInfoView) {
@@ -45,8 +47,8 @@ struct HomeView: View {
             }) {
                 Text("My plan")
                     .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
+                    .background(Color.white)
+                    .foregroundColor(.customBlue)
                     .cornerRadius(10)
             }
             .alert("¡Aviso!", isPresented: $showAlert) {
@@ -60,6 +62,16 @@ struct HomeView: View {
                 PlanView()
             }
             .offset(y: 100)
+            
+            VStack {
+                Spacer()
+                Rectangle()
+                    .fill(Color.navigationBarBlue)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: verticalSizeClass == .compact ? 65 : 100)
+            }
+            .frame(maxWidth: .infinity)
         }
+        .ignoresSafeArea()
     }
 }

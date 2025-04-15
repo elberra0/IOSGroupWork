@@ -55,6 +55,7 @@ struct MapGymsNearby: UIViewRepresentable {
 }
 
 struct MapGymsNearbyView: View {
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     @ObservedObject var locationManager = LocationManager()
     @State private var nearbyGyms: [GymModel] = [GymModel]()
     
@@ -93,10 +94,10 @@ struct MapGymsNearbyView: View {
                 Spacer()
                 Rectangle()
                     .fill(Color.navigationBarBlue)
-                    .frame(maxWidth: .infinity, maxHeight: 100)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: verticalSizeClass == .compact ? 65 : 100)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .ignoresSafeArea()
         }
         .ignoresSafeArea()
     }

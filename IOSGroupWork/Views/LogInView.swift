@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LogInView: View {
     @EnvironmentObject var userManager: UserManager
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
 
     @Binding  var showSignUp: Bool
     
@@ -28,7 +28,7 @@ struct LogInView: View {
                     .foregroundStyle(.white)
                     .font(.title)
                     .fontWeight(.bold)
-                    .padding(.top,horizontalSizeClass == .compact ? 100 : 5)
+                    .padding(.top,verticalSizeClass == .compact ? 5 : 100)
                 
                 Text("Log in to access the FitAPP")
                     .font(.caption)
@@ -44,7 +44,8 @@ struct LogInView: View {
                     TextViewCustom(icon:"at", hint:"Email or UserName",isPassword: false, value:$email)
                     TextViewCustom(icon:"lock", hint:"Password",isPassword: true, value:$password)
                         .padding(.top,20)
-                    Button("Log in"){
+                    
+                    Button(action:{
                         loginInvalid = UserManager.checkUserLogin(userNameOrEmail: email, password: password)
                         
                         if(!loginInvalid){
@@ -52,17 +53,21 @@ struct LogInView: View {
                             userManager.loggedInUser = UserManager.getUsername(usernameOrEmail: email)
                             loginValid = true
                         }
+                    }){
+                        Text("Log in")
+                            .padding()
+                            .frame(minWidth: 110, maxHeight: 40)
+                            .background(Color.white)
+                            .foregroundColor(.customBlue)
+                            .cornerRadius(10)
                     }
-                    .buttonStyle(.borderedProminent)
                     .disabled(email.isEmpty || password.isEmpty)
                     .alert( isPresented: $loginInvalid){
-                        Alert(title: Text("No se iniciar sesión"), message: Text("Campos introducidos incorrectos"), dismissButton: .default(Text("OK")))
+                        Alert(title:
+                                Text("No se iniciar sesión"), message: Text("Campos introducidos incorrectos"), dismissButton: .default(Text("OK")))
                     }
-                    .navigationDestination(isPresented: $loginValid){
-                        //MapGymsNearbyView()
-                        AppLoggedIn()
-                    }
-                    
+                    .navigationDestination(isPresented: $loginValid){AppLoggedIn()}
+                    .padding(.top,30)
                     
                     VStack{
                         Text("Don't have an account?")
@@ -71,12 +76,12 @@ struct LogInView: View {
                             showSignUp.toggle()
                         }
                         .foregroundStyle(.blue)
-                    }.padding(.top,50)
-                    
+                    }.padding(.top,70)
+            
                 }
                 .padding(.top, 20)
                 .padding(.vertical, 20)
-                .padding(.horizontal, horizontalSizeClass == .compact ? 30 : 100)
+                .padding(.horizontal, verticalSizeClass == .compact ? 100 : 30)
                 .toolbar(.hidden, for: .navigationBar)
                 
                 Spacer(minLength: 0)
