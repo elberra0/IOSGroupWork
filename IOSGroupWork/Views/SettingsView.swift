@@ -40,7 +40,7 @@ struct SettingsView: View {
                 .padding(.horizontal, 25)
                 
                 ScrollView{
-                    VStack(){
+                    VStack(spacing:20){
                         //Text fields
                         TextViewCustom(icon:"at", hint:"New Email", value: $newEmail)
                         

@@ -81,11 +81,13 @@ struct TestInfoView: View {
                         Text("Enviar")
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
+                            .frame(minWidth: verticalSizeClass == .compact ? 600 : 300, maxHeight: 40,alignment:.center)
+                            .background(Color.white)
+                            .foregroundColor(.customBlue)
                             .cornerRadius(8)
                     }
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .padding(.top,50)
+
                 }
                 .alert("¡Aviso!", isPresented: $showAlertPlan) {
                     Button("Ok", role: .none) {

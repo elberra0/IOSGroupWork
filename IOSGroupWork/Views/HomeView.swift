@@ -21,7 +21,7 @@ struct HomeView: View {
                     .foregroundStyle(.white)
                     .font(.title)
                     .fontWeight(.bold)
-                    .padding(.top,verticalSizeClass == .compact ? 5 : 100)
+                    .padding(.top,verticalSizeClass == .compact ? 10 : 100)
             }
             .padding(.horizontal, 10)
             
