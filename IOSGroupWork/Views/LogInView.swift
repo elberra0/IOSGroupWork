@@ -40,7 +40,6 @@ struct LogInView: View {
             
             ScrollView{
                 VStack(spacing:20){
-                    //Text fields
                     TextViewCustom(icon:"at", hint:"Email or UserName",isPassword: false, value:$email)
                     TextViewCustom(icon:"lock", hint:"Password",isPassword: true, value:$password)
                         .padding(.top,20)

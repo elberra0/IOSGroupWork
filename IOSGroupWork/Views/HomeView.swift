@@ -45,7 +45,7 @@ struct HomeView: View {
                 }) {
                     Text("Do test")
                         .padding()
-                        .frame(minWidth: 300, maxHeight: 40)
+                        .frame(minWidth: verticalSizeClass == .compact ? 600 : 300, maxHeight: 40)
                         .background(Color.white)
                         .foregroundColor(.customBlue)
                         .cornerRadius(10)
@@ -84,7 +84,7 @@ struct HomeView: View {
                 }) {
                     Text("My plan")
                         .padding()
-                        .frame(minWidth: 300, maxHeight: 40)
+                        .frame(minWidth: verticalSizeClass == .compact ? 600 : 300, maxHeight: 40)
                         .background(Color.white)
                         .foregroundColor(.customBlue)
                         .cornerRadius(10)

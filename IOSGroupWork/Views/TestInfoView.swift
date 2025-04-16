@@ -8,6 +8,8 @@ import SwiftUI
 
 struct TestInfoView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+
     @State private var age: String = ""
     @State private var sex: String = ""
     @State private var weight: String = ""
@@ -27,7 +29,7 @@ struct TestInfoView: View {
        
         
         VStack(alignment: .leading,spacing: 20,content: {
-            Spacer(minLength: 100)
+            Spacer(minLength: verticalSizeClass == .compact ? 20 : 70)
             Group{
                 Text("Test Plan")
                     .foregroundStyle(.white)
