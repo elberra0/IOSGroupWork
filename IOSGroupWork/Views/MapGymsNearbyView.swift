@@ -83,21 +83,11 @@ struct MapGymsNearbyView: View {
                 CLLocationManager().requestWhenInUseAuthorization()
             }
             
-            Button("Search gyms!"){
-                gerNearbyGyms()
-            }.disabled(nearbyGyms.count > 1)
-                .buttonStyle(.borderedProminent)
-                .foregroundStyle(.blue)
+            CustomButton(title: "Search Gyms!", action: {gerNearbyGyms()}, disabledCondition: false, alertConfig: nil)
                 .padding(.bottom, 100)
             
-            VStack {
-                Spacer()
-                Rectangle()
-                    .fill(Color.navigationBarBlue)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: verticalSizeClass == .compact ? 65 : 100)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            NavBarBackground()
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         }
         .ignoresSafeArea()
     }

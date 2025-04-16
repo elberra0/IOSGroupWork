@@ -58,23 +58,24 @@ struct SignUpView: View {
                     
                     TextViewCustom(icon:"lock", hint:"Confirm Password",isPassword: true, value:$passwordValidate)
                     
-                    Button("Sign up"){
-                        let userValidation = userAuth()
-                        
-                        if(userValidation){
-                            showAlert = true
-                        }else{
-                            let user = User(username: userName, password: password, email: email)
-                            UserManager.addUser(user: user)
-                            
-                            showSignUp.toggle()
-                        }
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(email.isEmpty || password.isEmpty||userName.isEmpty||passwordValidate.isEmpty)
-                    .alert(isPresented: $showAlert){
-                        Alert(title: Text("No se pudo registrar User"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
-                    }
+                    CustomButton(
+                        title: "Sign up",
+                        action: {
+                            let userValidation = userAuth()
+                            if userValidation {
+                                showAlert = true
+                            } else {
+                                let user = User(username: userName, password: password, email: email)
+                                UserManager.addUser(user: user)
+                                showSignUp.toggle()
+                            }
+                        },
+                        disabledCondition: email.isEmpty || password.isEmpty || userName.isEmpty || passwordValidate.isEmpty,
+                        alertConfig: AlertConfig(
+                            title: "No se pudo registrar User",
+                            message: errorMessage
+                        )
+                    )
                     
                     VStack{
                         Text("Already have an account?")

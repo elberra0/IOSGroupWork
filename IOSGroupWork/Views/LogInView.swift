@@ -45,30 +45,23 @@ struct LogInView: View {
                     TextViewCustom(icon:"lock", hint:"Password",isPassword: true, value:$password)
                         .padding(.top,20)
                     
-                    Button(action:{
-                        loginInvalid = UserManager.checkUserLogin(userNameOrEmail: email, password: password)
-                        
-                        if(!loginInvalid){
-                            //Store current user logged in
-                            userManager.loggedInUser = UserManager.getUsername(usernameOrEmail: email)
-                            loginValid = true
-                        }
-                    }){
-                        Text("Log in")
-                            .padding()
-                            .frame(minWidth: 110, maxHeight: 40)
-                            .background(Color.white)
-                            .foregroundColor(.customBlue)
-                            .cornerRadius(10)
-                    }
-                    .disabled(email.isEmpty || password.isEmpty)
-                    .alert( isPresented: $loginInvalid){
-                        Alert(title:
-                                Text("No se iniciar sesión"), message: Text("Campos introducidos incorrectos"), dismissButton: .default(Text("OK")))
-                    }
-                    .navigationDestination(isPresented: $loginValid){AppLoggedIn()}
-                    .padding(.top,30)
-                    
+                    CustomButton(
+                        title: "Log in",
+                        action: {
+                            loginInvalid = UserManager.checkUserLogin(userNameOrEmail: email, password: password)
+                            if !loginInvalid {
+                                userManager.loggedInUser = UserManager.getUsername(usernameOrEmail: email)
+                                loginValid = true
+                            }
+                        },
+                        disabledCondition: email.isEmpty || password.isEmpty,
+                        alertConfig: AlertConfig(
+                            title: "No se iniciar sesión",
+                            message: "Campos introducidos incorrectos"
+                        )
+                    )
+                    .navigationDestination(isPresented: $loginValid) { AppLoggedIn() }
+
                     VStack{
                         Text("Don't have an account?")
                             .foregroundStyle(.gray)

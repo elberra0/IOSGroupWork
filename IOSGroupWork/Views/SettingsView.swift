@@ -40,7 +40,7 @@ struct SettingsView: View {
                 .padding(.horizontal, 25)
                 
                 ScrollView{
-                    VStack(spacing:20){
+                    VStack(){
                         //Text fields
                         TextViewCustom(icon:"at", hint:"New Email", value: $newEmail)
                         
@@ -74,19 +74,11 @@ struct SettingsView: View {
                         }.padding(.bottom, 70)
                     
                     Spacer()
-                    
                 }
-
-                Rectangle()
-                    .fill(Color.navigationBarBlue)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: verticalSizeClass == .compact ? 65 : 100)
-                
+                NavBarBackground()
             })
             .ignoresSafeArea()
             .background(Color.customBlue)
-        
-
     }
     
     func userAuth() -> Bool{
