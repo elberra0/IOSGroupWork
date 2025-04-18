@@ -106,7 +106,7 @@ class UserManager: ObservableObject {
     }
     
     static func getUserPassword(usernameOrEmail:String)->String?{
-        var users:[User] = loadUsers()
+        let users:[User] = loadUsers()
         if let user = users.first(where: {$0.username == usernameOrEmail}){
             return user.password
         }
@@ -131,7 +131,7 @@ class UserManager: ObservableObject {
     }
     
     static func getUserEmail(username:String)->String?{
-        var users:[User] = loadUsers()
+        let users:[User] = loadUsers()
         if let user = users.first(where: {$0.username == username}){
             return user.email
         }
@@ -139,7 +139,7 @@ class UserManager: ObservableObject {
     }
     
     static func getUsername(usernameOrEmail: String) -> String? {
-        var users = UserManager.loadUsers()
+        let users = UserManager.loadUsers()
         if let user = users.first(where: { $0.username == usernameOrEmail || $0.email == usernameOrEmail }) {
             return user.username
         }

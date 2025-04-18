@@ -9,31 +9,19 @@ import MapKit
 import Foundation
 
 class PlanManager:ObservableObject {
-    
+   /*
     static func savePlanes(planes:[WorkoutPlan]){
         if let encoded = try? JSONEncoder().encode(planes) {
             UserDefaults.standard.set(encoded, forKey: "planes")
         }
     }
-    
+  */
     static func saveMyPlanId(planId:Int){
         UserDefaults.standard.set(planId, forKey: "planId")
     }
     
-    static func getPlanById(planId: Int) ->  WorkoutPlan {
-        let planes = UserDefaults.standard.data(forKey: "planes")
-        if planes == nil
-        {
-            return WorkoutPlan(id: 0, clasificacionid: 0, clasificacion: "", ejercicios: [:], consejos: [], nutricion: Nutrition(principios: Principles(macronutrientes: [:]), planComidas: [:]))
-        }
-            
-        let localPlanes = try! JSONDecoder().decode([WorkoutPlan].self, from: planes!)
-        
-        return localPlanes.first(where: {$0.id == planId})!
-    }
-    
-    static func getmyPlan() -> WorkoutPlan {
+    static func getmyPlanId() -> Int {
         let planId: Int = UserDefaults.standard.integer(forKey: "planId")
-        return  getPlanById(planId: planId)
+        return planId;
     }
 }

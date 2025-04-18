@@ -10,6 +10,4 @@ struct WorkoutPlan: Codable {
     let clasificacionid: Int
     let clasificacion: String
     let ejercicios: [String: DayPlan]
-    let consejos: [String]
-    var nutricion: Nutrition
 }

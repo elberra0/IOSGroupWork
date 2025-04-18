@@ -13,18 +13,19 @@
 import SwiftUI
 
 struct PlanView: View {
-    let myPlan = PlanManager.getmyPlan()
+    let myPlan =  PersistenceController.shared.getPlanById(planId: PlanManager.getmyPlanId() )
+    
     var body: some View {
         
         VStack(alignment: .leading,spacing: 20,content: {
             Spacer(minLength: 30)
             Group{
-                Text(myPlan.clasificacion)
+                Text("My Plan")
                     .foregroundStyle(.white)
                     .font(.title)
                     .fontWeight(.bold)
                 
-                Text("Hoy es un buen día para estar en forma.")
+                Text("Today is a good dat for fitness")
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(.gray)
@@ -32,12 +33,19 @@ struct PlanView: View {
             }
             .padding(.horizontal, 25)
             
+            Text(myPlan.clasificacion)
+                .foregroundStyle(.white)
+                .font(.title3)
+                .fontWeight(.semibold)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .center)
+            
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     EjerciciosList(workoutData: myPlan).foregroundStyle(.white)
-                    ConsejosSection(workoutData: myPlan).foregroundStyle(.white)
-                    NutricionSection(workoutData: myPlan).foregroundStyle(.white)
-                    PlanComidaSection(workoutData: myPlan).foregroundStyle(.white)
+                    //ConsejosSection(workoutData: myPlan).foregroundStyle(.white)
+                    //NutricionSection(workoutData: myPlan).foregroundStyle(.white)
+                    //PlanComidaSection(workoutData: myPlan).foregroundStyle(.white)
                 }
                 .padding(16)
             }

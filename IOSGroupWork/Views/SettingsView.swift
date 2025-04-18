@@ -89,7 +89,7 @@ struct SettingsView: View {
                 
                 UserManager.modifyUser(username: userManager.loggedInUser ?? "user not found", newUserName: newUserName, newEmail: user?.email ?? "email not found", newPassword: user?.password ?? "password not found")
                 
-                var userss = UserManager.loadUsers()
+                _ = UserManager.loadUsers()
                 userManager.loggedInUser = newUserName
             
                 logmessage = "Username changed correctly"
@@ -107,7 +107,7 @@ struct SettingsView: View {
                 
                 UserManager.modifyUser(username: userManager.loggedInUser ?? "user not found", newUserName: user?.username ?? "username not found", newEmail: newEmail, newPassword: password)
                 
-                var userss = UserManager.loadUsers()
+                _ = UserManager.loadUsers()
                 logmessage = "Email changed correctly"
             }else{
                 logmessage = "Email is already taken. Please choose another one"

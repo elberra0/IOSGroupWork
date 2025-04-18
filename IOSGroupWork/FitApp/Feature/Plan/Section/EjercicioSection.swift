@@ -10,10 +10,21 @@ struct EjercicioSection: View {
     let dayData: DayPlan
 
     var body: some View {
-        Section(header: Text(day.capitalized).fontWeight(.bold) ) {
-            Text("Tipo: \(dayData.tipo)")
+        Section(header:
+                    Text("Esta es tu rutina para el \(day.capitalized):")
+                    .foregroundStyle(.white)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, -20)
+        ) {
+            Text("\(dayData.tipo)")
                 .font(.headline)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .center)
             Text("Calentamiento: \(dayData.calentamiento ?? "No especificado")")
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .center)
             
             EjerciciosListView(ejercicios: dayData.ejercicios)
 

@@ -47,7 +47,7 @@ struct LogInView: View {
                     CustomButton(
                         title: "Log in",
                         action: {
-                            loginInvalid = UserManager.checkUserLogin(userNameOrEmail: email, password: password)
+                             loginInvalid = UserManager.checkUserLogin(userNameOrEmail: email, password: password)
                             if !loginInvalid {
                                 userManager.loggedInUser = UserManager.getUsername(usernameOrEmail: email)
                                 loginValid = true

@@ -71,7 +71,7 @@ struct HomeView: View {
                 .padding(.horizontal, 25)
                 
                 Button(action: {
-                    if PlanManager.getmyPlan().id > 0
+                    if PlanManager.getmyPlanId() > 0
                     {
                         isShowingPlanView = true
                     }

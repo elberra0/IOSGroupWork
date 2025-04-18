@@ -11,11 +11,10 @@ import Foundation
 final class APIPersistenceService {
     static let shared = APIPersistenceService()
     
-    private init() {}
+   private init() {}
     
-    private let apiKey = ""
     private let pathGetPlanes = "getplanes"
-    private let pathGetPlanById = "getplanbyId"
+    private let pathGetClasificaciones = "getclasificaciones"
     
     private(set) var workoutPlan: [WorkoutPlan] = []
     private let urlServer = "https://invoicegen.gear.host/api/FitApp/"
@@ -23,22 +22,40 @@ final class APIPersistenceService {
     func load() {
         Task{
             workoutPlan = try await getAll()
-            PlanManager.savePlanes(planes: workoutPlan)
+           // PlanManager.savePlanes(planes: workoutPlan)
         }
     }
     
     func getPlanById(plandId: Int) throws -> WorkoutPlan {
-        return try PlanManager.getPlanById(planId: plandId)
+        return  PersistenceController.shared.getPlanById(planId: plandId)
     }
     
     func getAll() async throws -> [WorkoutPlan] {
     
-        guard let url = URL(string: urlServer + pathGetPlanes) else { throw URLError(.badURL) }
+       // guard let url = URL(string: urlServer + pathGetPlanes) else { throw URLError(.badURL) }
       
-        let (data,_) = try await URLSession.shared.data(from: url)
+      //  let (data,_) = try await URLSession.shared.data(from: url)
         
-        let decoded = try JSONDecoder().decode([WorkoutPlan].self, from: data)
+      //  let decoded = try JSONDecoder().decode([WorkoutPlan].self, from: data)
  
-        return decoded
+        /*
+         decoded.forEach { item in
+            let planEntity = PlanEntity(context: PersistenceController.shared.container.viewContext)
+            planEntity.id = Int16(item.id)
+            planEntity.clasificacionId = Int16(item.clasificacionid)
+            planEntity.clafisicacion = item.clasificacion
+
+            do {
+                let ejercicios = try JSONEncoder().encode(item.ejercicios)
+                let jsonString = String(data: ejercicios, encoding: .utf8)
+                planEntity.ejercicios = jsonString
+                try PersistenceController.shared.viewContext.save()
+                print("¡Guardado con éxito! ID: ", planEntity.id)
+            } catch {
+                print("Error al guardar: \(error)")
+            }
+        }
+    */
+        return try PersistenceController.shared.getAll()
     }
 }
