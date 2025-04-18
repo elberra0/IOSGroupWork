@@ -19,8 +19,8 @@ struct TestInfoView: View {
     @State private var showAlertPlan: Bool = false
     @State private var stringBuilder: String = ""
     let _APIPersistenceService: APIPersistenceService
-    let sexOptions = ["Masculino", "Femenino"]
-    let objetivoOptions = ["Perder peso", "Ganar masa muscular", "Mantener peso"]
+    let sexOptions = ["Gender", "Male", "Female"]
+    let objetivoOptions = ["Goal", "Lose weight", "Gain muscle mass", "Maintain weight"]
     init() {
      _APIPersistenceService = APIPersistenceService.shared
      _APIPersistenceService.load()
@@ -31,12 +31,12 @@ struct TestInfoView: View {
         VStack(alignment: .leading,spacing: 20,content: {
             Spacer(minLength: verticalSizeClass == .compact ? 20 : 70)
             Group{
-                Text("Test Plan")
+                Text("Do Test")
                     .foregroundStyle(.white)
                     .font(.title)
                     .fontWeight(.bold)
                 
-                Text("Determinar el plan de ejercicios")
+                Text("Determine the exercise plan")
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(.gray)
@@ -46,42 +46,43 @@ struct TestInfoView: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    TextField("Edad", text: $age)
+                    TextField("Age", text: $age)
                         .keyboardType(.numberPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .accessibilityLabel("Campo de edad")
+                        .accessibilityLabel("Age field")
                     
-                    Picker("Sexo", selection: $sex) {
+                    Picker("Gender", selection: $sex) {
                         ForEach(sexOptions, id: \.self) { option in
                             Text(option)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
-                    .accessibilityLabel("Selección de sexo")
+                    .accessibilityLabel("Gender selection")
                     
-                    TextField("Peso actual (kg)", text: $weight)
+                    TextField("Current weight (kg)", text: $weight)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .accessibilityLabel("Campo de peso")
+                        .accessibilityLabel("Weight field")
                     
-                    TextField("Altura (cm)", text: $height)
+                    TextField("Current height (cm)", text: $height)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .accessibilityLabel("Campo de altura")
+                        .accessibilityLabel("High field")
                     
-                    Picker("Objetivo", selection: $objetivo) {
+                    Picker("Goal", selection: $objetivo) {
                         ForEach(objetivoOptions, id: \.self) { option in
                             Text(option)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
-                    .accessibilityLabel("Objetivo")
+                    .accessibilityLabel("Goal")
                     
                     Button(action: onSubmitClick) {
-                        Text("Enviar")
+                        Text("Let's go")
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
-                            .frame(minWidth: verticalSizeClass == .compact ? 600 : 300, maxHeight: 40,alignment:.center)
+                            //.frame(minWidth: verticalSizeClass == .compact ? 600 : 300, maxHeight: 40,alignment:.center)
+                            .frame(maxWidth: .infinity, alignment: .center)
                             .background(Color.white)
                             .foregroundColor(.customBlue)
                             .cornerRadius(8)
@@ -89,7 +90,7 @@ struct TestInfoView: View {
                     .padding(.top,50)
 
                 }
-                .alert("¡Aviso!", isPresented: $showAlertPlan) {
+                .alert("Warning!", isPresented: $showAlertPlan) {
                     Button("Ok", role: .none) {
                         stringBuilder = ""
                         showAlert = false
@@ -99,7 +100,7 @@ struct TestInfoView: View {
                     Text(stringBuilder)
                 }
                 .padding(16)
-                .alert("¡Aviso!", isPresented: $showAlert) {
+                .alert("Warning!", isPresented: $showAlert) {
                     Button("Ok", role: .none) {
                         stringBuilder = ""
                         showAlert = false
@@ -112,33 +113,37 @@ struct TestInfoView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.customBlue)
         .edgesIgnoringSafeArea(.all)
+        .onAppear {
+            objetivo = "Goal"
+            sex = "Gender"
+        }
     }
     
     func onSubmitClick() {
         
         if age  == ""
         {
-            stringBuilder.append("Debe espeficiar su edad. \n")
+            stringBuilder.append("You must specify your age. \n")
         }
         
-        if sex  == ""
+        if sex  == "" || sex == "Gender"
         {
-            stringBuilder.append("Debe espeficiar su sexo. \n")
+            stringBuilder.append("You must specify your gender. \n")
         }
         
         if weight  == ""
         {
-            stringBuilder.append("Debe espeficiar su peso. \n")
+            stringBuilder.append("You must specify your weight. \n")
         }
         
         if height  == ""
         {
-            stringBuilder.append("Debe espeficiar su altura. \n")
+            stringBuilder.append("You must specify your height. \n")
         }
         
-        if objetivo  == ""
+        if objetivo  == "" || objetivo == "Goal"
         {
-            stringBuilder.append("Debe elegir un objetivo. \n")
+            stringBuilder.append("You must choose a goal. \n")
         }
         
         if stringBuilder == ""
@@ -180,7 +185,7 @@ struct TestInfoView: View {
         }
 
         switch sex {
-        case "Hombre":
+        case "Male":
             puntosPuntos += 2
         default:
             puntosPuntos += 1
@@ -205,7 +210,7 @@ struct TestInfoView: View {
         }
 
         switch objetivo {
-        case "Mantener peso":
+        case "Maintain weight":
             puntosPuntos += 2
         default:
             puntosPuntos += 3
