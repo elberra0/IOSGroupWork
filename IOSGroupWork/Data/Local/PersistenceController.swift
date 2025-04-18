@@ -26,7 +26,6 @@ struct PersistenceController {
         return container.viewContext
     }
     
-    
     func getAll() throws -> [WorkoutPlan] {
         let fetchRequest: NSFetchRequest<PlanEntity> = PlanEntity.fetchRequest()
         
@@ -55,6 +54,21 @@ struct PersistenceController {
         }
     }
     
+    
+    func deleteAll() {
+        let context = container.viewContext
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = PlanEntity.fetchRequest()
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try context.execute(deleteRequest)
+            try context.save()
+            print("Datos eliminados correctamente")
+        } catch {
+            print("Error al borrar datos: \(error)")
+        }
+    }
+    
     func getPlanById(planId: Int) -> WorkoutPlan {
        
         let context = container.viewContext
@@ -78,14 +92,10 @@ struct PersistenceController {
                 return WorkoutPlan
             }
             
-      
-         
         } catch {
             print("Error al actualizar")
         }
         return WorkoutPlan(id: 0, clasificacionid: 0, clasificacion: "", ejercicios: [:]
         )
     }
-    
-    
 }
